@@ -10,6 +10,88 @@ card list, threat list, relics, and wave structure. All values are starting
 points meant to be tuned by playtesting — they are deliberately conservative
 and readable, not finely balanced.
 
+The Flutter prototype in this repository implements all of the content below
+in a **data-driven** way. The sections from "Card list" onward are the source
+of truth; the Dart data files mirror them one-to-one.
+
+-----
+
+## How to run
+
+This repo ships the Dart source (`lib/`, `test/`) and `pubspec.yaml`, but not
+the generated per-platform runners. To build and play:
+
+```bash
+# 1. Generate the platform scaffolding (Android/iOS/web/desktop).
+#    This does NOT overwrite lib/, test/, README.md or pubspec.yaml.
+flutter create .
+
+# 2. Fetch dependencies.
+flutter pub get
+
+# 3. Run the core combat logic tests (no device needed).
+flutter test
+
+# 4. Launch on a device, emulator, or Chrome.
+flutter run
+```
+
+Designed for **portrait** phones; a 3–4 minute session is one 8-wave night.
+
+-----
+
+## Project structure
+
+```
+lib/
+  game/                      # Pure Dart — no Flutter imports, fully testable
+    models/                  # Card, Threat, Relic, Wave, effects, enums
+    data/                    # The content spec as data:
+      cards_data.dart        #   32 cards (CardLibrary)
+      threats_data.dart      #   11 threats (ThreatLibrary)
+      relics_data.dart       #   4 relics (RelicLibrary)
+      waves_data.dart        #   8-wave night (WaveLibrary)
+    engine/
+      run_state.dart         # RunState — the pure combat/run model
+      combat_engine.dart     # All combat rules (draw, play, resolve, win/lose)
+    meta/
+      meta_state.dart        # Persistent unlock/banking logic (pure)
+      save_service.dart      # shared_preferences persistence
+    deck_builder.dart        # Starting-deck construction
+  state/
+    providers.dart           # Riverpod controllers bridging engine <-> UI
+  ui/
+    theme.dart               # Honey/amber palette + hexagon styling
+    widgets/                 # Hexagons, cards, threats, resource bar
+    screens/                 # Main menu, combat, post-run summary
+test/
+  combat_engine_test.dart    # Core combat resolution unit tests
+  meta_state_test.dart       # Unlock + banking unit tests
+```
+
+## Architecture decisions
+
+- **Pure logic / UI split.** Everything under `lib/game/` is plain Dart with
+  no Flutter imports, so the combat resolution is unit-testable in isolation.
+  The UI only ever reads cloned `RunState` snapshots and calls engine actions.
+- **State management: Riverpod.** `RunController` owns a `CombatEngine` and
+  emits immutable snapshots; `MetaController` owns persistent progression.
+- **Data-driven content.** Cards are composed from a small set of reusable
+  `CardEffect` primitives (see `models/effects.dart`). Adding a card, threat,
+  relic, or wave is editing a data list — no engine changes for common cases.
+- **Persistence: `shared_preferences`.** The save payload is a handful of
+  scalars and small id sets (banked Honey, unlocked card ids, a few stats). A
+  schema-less key/value store is right-sized; hive/isar would be overkill.
+- **Determinism for tests.** The engine takes an injectable `Random`, so
+  shuffles and random card adds are reproducible.
+
+### A note on the win condition
+
+Per the spec, a night is won by **surviving all 8 waves** ("End turn → next
+wave"). Each turn reveals one wave; unkilled threats persist and stack, so the
+pressure comes from accumulation. The night is won the moment you survive the
+8th wave's resolution.
+
 -----
 
 ## 1. Core resources & rules
