@@ -176,7 +176,7 @@ class _RelicTile extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: selected ? HiveColors.amber.withOpacity(0.18) : HiveColors.surface,
+          color: selected ? HiveColors.amber.withValues(alpha: 0.18) : HiveColors.surface,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: selected ? HiveColors.amber : HiveColors.comb,

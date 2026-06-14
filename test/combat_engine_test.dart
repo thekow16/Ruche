@@ -7,7 +7,6 @@ import 'package:hive_game/game/data/threats_data.dart';
 import 'package:hive_game/game/deck_builder.dart';
 import 'package:hive_game/game/engine/combat_engine.dart';
 import 'package:hive_game/game/engine/run_state.dart';
-import 'package:hive_game/game/models/card.dart';
 import 'package:hive_game/game/models/enums.dart';
 import 'package:hive_game/game/models/relic.dart';
 import 'package:hive_game/game/models/threat.dart';
@@ -25,6 +24,8 @@ CombatEngine freshEngine({
     rng: Random(7),
   );
   engine.run.hand.clear();
+  // Wave 1 auto-spawns a threat; clear the board so each test stages its own.
+  engine.run.threats.clear();
   return engine;
 }
 
