@@ -43,7 +43,7 @@ class ThreatView extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.bug_report,
                         color: HiveColors.paleHoney,
                         size: 22,
