@@ -37,6 +37,17 @@ flutter run
 ```
 
 Designed for **portrait** phones; a 3–4 minute session is one 8-wave night.
+Requires Flutter **3.27+** (stable).
+
+### Live web preview (CI)
+
+The `.github/workflows/web-preview.yml` workflow runs `flutter analyze` +
+`flutter test`, compiles the web target, and publishes it to the `gh-pages`
+branch on every push. To view it as a clickable link, enable **Settings →
+Pages → Source: Deploy from a branch → `gh-pages` / root**. The site then lives
+at `https://<user>.github.io/Ruche/` and opens fine in a mobile browser.
+(GitHub Pages for a *private* repo requires a paid plan; on the free plan,
+make the repo public or download the build from the workflow run instead.)
 
 -----
 

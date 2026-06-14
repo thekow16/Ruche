@@ -37,12 +37,12 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 16),
-              Center(
+              const Center(
                 child: HexCell(
                   size: 96,
                   color: HiveColors.amber,
                   borderColor: HiveColors.paleHoney,
-                  child: const Icon(Icons.hive, size: 48, color: HiveColors.background),
+                  child: Icon(Icons.hive, size: 48, color: HiveColors.background),
                 ),
               ),
               const SizedBox(height: 12),
@@ -62,7 +62,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen> {
                 best: meta.bestHoney,
               ),
               const SizedBox(height: 24),
-              _SectionTitle('Choose a relic'),
+              const _SectionTitle('Choose a relic'),
               const SizedBox(height: 8),
               ...RelicLibrary.all.map(
                 (r) => _RelicTile(
@@ -82,7 +82,7 @@ class _MainMenuScreenState extends ConsumerState<MainMenuScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-              _SectionTitle('Unlock cards (spend banked Honey)'),
+              const _SectionTitle('Unlock cards (spend banked Honey)'),
               const SizedBox(height: 8),
               ...CardLibrary.lockedCards.map((entry) {
                 final card = CardLibrary.get(entry.cardId);
@@ -176,7 +176,7 @@ class _RelicTile extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: selected ? HiveColors.amber.withOpacity(0.18) : HiveColors.surface,
+          color: selected ? HiveColors.amber.withValues(alpha: 0.18) : HiveColors.surface,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: selected ? HiveColors.amber : HiveColors.comb,

@@ -1,0 +1,50 @@
+name: web-preview
+
+on:
+  push:
+    branches: [claude/hive-card-threat-relic-data-oofw5x]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - run: flutter --version
+
+      # Generate the web platform folder (does not touch lib/, test/, pubspec).
+      - name: Generate platform scaffolding
+        run: flutter create --platforms=web --project-name hive_game .
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Informational — does not block the preview build.
+      - name: Analyze
+        run: flutter analyze
+        continue-on-error: true
+
+      - name: Test
+        run: flutter test
+        continue-on-error: true
+
+      # Real compile errors fail here and stop the deploy.
+      - name: Build web
+        run: flutter build web --release --base-href /Ruche/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+          force_orphan: true

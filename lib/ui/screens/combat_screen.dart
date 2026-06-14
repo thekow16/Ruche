@@ -111,7 +111,7 @@ class _Banner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: HiveColors.amber.withOpacity(0.9),
+      color: HiveColors.amber.withValues(alpha: 0.9),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
@@ -270,7 +270,7 @@ class _RewardOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black.withOpacity(0.82),
+      color: Colors.black.withValues(alpha: 0.82),
       child: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
